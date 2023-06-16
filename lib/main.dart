@@ -8,8 +8,13 @@ import 'package:myelbum_retail/ui/data_layer/utils/utils.dart';
 import 'ui/data_layer/screens/authentication/register/full_sign_up/google_or_email.dart';
 import 'ui/data_layer/screens/authentication/register/retail_sign_up/retail_sign_up.dart';
 
+import 'package:flutter_credit_card_detector/flutter_credit_card_detector.dart';
+
 void main() {
-  runApp(const ElbumRetailApp());
+  runApp(MultiProvider(providers: [
+     ChangeNotifierProvider(create: (_) => ControllerBase()),
+  ],
+  child: const ElbumRetailApp()));
 }
 
 class ElbumRetailApp extends StatelessWidget {
@@ -149,7 +154,6 @@ class _SplashScrenState extends State<SplashScren>
 
 class SignChoiceType extends StatelessWidget {
   const SignChoiceType({super.key});
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
