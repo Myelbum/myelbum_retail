@@ -1,6 +1,14 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:custom_selectable_text/custom_selectable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:myelbum_retail/ui/comon/palette.dart';
+import 'package:myelbum_retail/ui/data_layer/utils/utils.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:path_provider/path_provider.dart';
 
 class BuisnessProfilePage extends StatefulWidget {
   const BuisnessProfilePage({super.key});
@@ -15,9 +23,13 @@ class _BuisnessProfilePageState extends State<BuisnessProfilePage> {
 
   late MapController mapController;
 
+  late ScreenshotController screenshotController;
+  late Uint8List imageFile;
+
   @override
   void initState() {
     super.initState();
+    screenshotController = ScreenshotController();
     mapController = MapController.withUserPosition(
       areaLimit: const BoundingBox.world(),
     );
@@ -199,10 +211,115 @@ class _BuisnessProfilePageState extends State<BuisnessProfilePage> {
                           const SizedBox(
                             width: 5.0,
                           ),
-                          Text(
-                            "AY126YG0M",
-                            style: TextStyle(
-                                color: Palette.appThemeColor, fontSize: 12.0),
+                          InkWell(
+                            onTap: () {
+                              showAlertDialog(
+                                  context,
+                                  size,
+                                  const SizedBox.shrink(),
+                                  Column(
+                                    children: [
+                                      Text(
+                                        "FRED PRINT",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            color:
+                                                Colors.black.withOpacity(0.54),
+                                            fontSize: 16.0),
+                                      ),
+                                      Screenshot(
+                                        controller: screenshotController,
+                                        child: QrImageView(
+                                          data: 'AY126YG0M',
+                                          version: QrVersions.auto,
+                                          size: 200.0,
+                                        ),
+                                      ),
+                                      CustomSelectableText(
+                                        "AY126YG0M",
+                                        style: TextStyle(
+                                            decoration:
+                                                TextDecoration.underline,
+                                            color:
+                                                Colors.black.withOpacity(0.54),
+                                            fontSize: 12.0),
+                                        items: [
+                                          CustomSelectableTextItem(
+                                              controlType:
+                                                  SelectionControlType.copy),
+                                        ],
+                                      ),
+                                      const Spacer(),
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Visibility(
+                                            visible: false,
+                                            child: Icon(
+                                              Icons.copy,
+                                              color: Palette.appThemeColor,
+                                              size: 25.0,
+                                            ),
+                                          ),
+                                          const Visibility(
+                                            visible: false,
+                                            child: SizedBox(
+                                              width: 20.0,
+                                            ),
+                                          ),
+                                          InkWell(
+                                            onTap: () {
+                                              screenshotController
+                                                  .capture()
+                                                  .then(
+                                                      (Uint8List? image) async {
+                                                    imageFile = image!;
+                                                    if (imageFile.isNotEmpty) {
+                                                      final directory =
+                                                          await getExternalStorageDirectory();
+
+                                                      final String fileName =
+                                                          "${DateTime.now().microsecondsSinceEpoch}";
+                                                      final imagePath = await File(
+                                                              '${directory!.path}/$fileName.png')
+                                                          .create();
+
+                                                      await imagePath
+                                                          .writeAsBytes(
+                                                              imageFile);
+                                                    }
+                                                  })
+                                                  .catchError((onError) {})
+                                                  .whenComplete(() {
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(
+                                                            const SnackBar(
+                                                                content: Text(
+                                                                    "QR code téléchargé avec succès")));
+                                                  });
+                                            },
+                                            child: const Icon(Icons.download,
+                                                color: Colors.black,
+                                                size: 25.0),
+                                          )
+                                        ],
+                                      ),
+                                      const Spacer(),
+                                    ],
+                                  ),
+                                  size.height * 0.35);
+                            },
+                            child: Text(
+                              "AY126YG0M",
+                              style: TextStyle(
+                                  decoration: TextDecoration.underline,
+                                  color: Palette.appThemeColor,
+                                  fontSize: 12.0),
+                            ),
                           ),
                         ],
                       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myelbum_retail/ui/data_layer/screens/authentication/register/retail_sign_up/buisness_location.dart';
+import 'package:myelbum_retail/ui/data_layer/screens/main_pages/set_currency_rate.dart';
 import 'package:myelbum_retail/ui/data_layer/utils/utils.dart';
 import 'package:myelbum_retail/ui/data_layer/widgets/switch_widget.dart';
 
@@ -88,7 +89,15 @@ class _BuisnesOpeningHourState extends State<BuisnesOpeningHour> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const BuisnessLocation()));
+                        builder: (context) => SetCurrencyRate(
+                              callBack: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const BuisnessLocation()));
+                              },
+                            )));
               }),
             ],
           ),
