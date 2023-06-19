@@ -1,27 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:myelbum_retail/ui/comon/palette.dart';
 
+/// page_builder
+///
+buildPage(BuildContext context, Widget page) =>
+    Navigator.push(context, MaterialPageRoute(builder: (context) => page));
 
-///Cette fonction peut être utilisée pour afficher un simple objet Row 
+///Cette fonction peut être utilisée pour afficher un simple objet Row
 /// avec juste deux widget afficher de part à gauche et à droite de l'écran.
 
 buildRow(Widget leftSize, Widget rightSide, Size size) => SizedBox(
-        width: size.width,
-        height: size.height * 0.05,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: leftSize,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: rightSide,
-            ),
-          ],
-        ),
-      );
+      width: size.width,
+      height: size.height * 0.05,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: leftSize,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: rightSide,
+          ),
+        ],
+      ),
+    );
 
 ///Cette fonction peut être utilisée pour afficher un simple point ou marqueur
 /// de petite taille dans l'interface utilisateur.
@@ -103,14 +107,17 @@ Container customStepButton(Size size, String text, Function()? onPressed) =>
     );
 
 Container customStepOutlinedButton(
-        Size size, String text, Function()? onPressed) =>
+        Size size, String text, Function()? onPressed,
+        [bool useDefault = false]) =>
     Container(
       margin: const EdgeInsets.symmetric(horizontal: 20.0),
       child: OutlinedButton(
         onPressed: onPressed,
         style: ButtonStyle(
             backgroundColor: MaterialStatePropertyAll(
-                onPressed == null ? Colors.transparent : Palette.appThemeColor),
+                onPressed == null || useDefault
+                    ? Colors.transparent
+                    : Palette.appThemeColor),
             shape: MaterialStatePropertyAll(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(23.46),
@@ -120,9 +127,9 @@ Container customStepOutlinedButton(
                 Size(size.width, size.height * 0.065))),
         child: Text(
           text,
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.w600,
-            color: Colors.grey,
+            color: useDefault ? Colors.white : Colors.grey,
             fontSize: 14.0,
           ),
         ),
@@ -133,7 +140,7 @@ Container customStepOutlinedButton(
 ///titre et un contenu spécifiés, en utilisant
 ///la taille fournie pour déterminer les dimensions de la boîte de dialogue.
 void showAlertDialog(
-    BuildContext context, Size size, Text? title, Widget content,
+    BuildContext context, Size size, Widget? title, Widget content,
     [double height = 100.0]) {
   showDialog(
     context: context,

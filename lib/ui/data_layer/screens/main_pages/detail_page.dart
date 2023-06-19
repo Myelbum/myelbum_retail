@@ -52,12 +52,53 @@ class DetailPage extends StatelessWidget {
                           fontSize: 12.0,
                         ),
                       ),
-                      Text(
-                        '+22997892406',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          color: Palette.appThemeColor,
-                          fontSize: 10.0,
+                      InkWell(
+                        onTap: () {
+                          showAlertDialog(
+                              context,
+                              size,
+                              Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Icon(
+                                        Icons.close,
+                                        color: Colors.green,
+                                      ),
+                                    )
+                                  ]),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Text(
+                                      "Call via",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 12.0,
+                                      ),
+                                    ),
+                                    _buildSimpleContainer(
+                                        Icons.phone, "Téléphone"),
+                                    _buildSimpleContainer(
+                                        Icons.phone_iphone, "WhatsApp")
+                                  ],
+                                ),
+                              ),
+                              size.height * 0.25);
+                        },
+                        child: Text(
+                          '+22997892406',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            color: Palette.appThemeColor,
+                            fontSize: 10.0,
+                          ),
                         ),
                       ),
                     ],
@@ -283,5 +324,32 @@ class DetailPage extends StatelessWidget {
     );
   }
 
-
+  _buildSimpleContainer(IconData icon, String text) => Column(
+        children: [
+          const Divider(
+            color: Colors.grey,
+          ),
+          ListTile(
+            leading: Icon(
+              icon,
+              color: Colors.green,
+            ),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  text,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(
+                  width: 50.0,
+                )
+              ],
+            ),
+          ),
+        ],
+      );
 }
